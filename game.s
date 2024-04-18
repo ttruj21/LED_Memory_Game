@@ -148,21 +148,34 @@ loop2		SUBS R4, #1
 
 
 FlashSequence	function
-				; for loop (runs 5 times)
 
-				MOV r1, #0
-		loop	CM
- 				; generate random number x5
+                MOV r1, #0
+        loop    CMP r1, #4
+                BGE Done
+                ; generate random number x5
+                ADD r1, r1, #1
+                B loop
 
 				; SubRoutine: Enter a Loop for User to input Sequence
 
-				; Create a stack for flashed sequence to commpare
-UserSequence	function	
-				; User inputs a sequence
-					; Check each button to see if pressed
+				; loop
+					; flash counter, increment, break when 5
+					; get random value (0 1 2 or 3)
+					; flash matching LED (0 = white 1 = blue 2 = green 3 = red)
+					; delay (make sure its on for a few seconds)
+					; turn off the LED
+					; STR r3, [r0, R1, LSL #2] ; (store value to memory)
+
 UserSequence    function    
                 ; User inputs a sequence
-                    ; Check each button to see if pressed
+                ; Check each button to see if pressed
+
+
+				; go into checks to see if button pressed
+					; if pressed, increment button_counter, go to button_match
+						; CMP to memory value according to button_counter
+						; update match_counter (increment by 1 if match)
+				; if match does not equal 5, LOSER
         check0      AND R4, R3, #0x01               ; Masks input to isolate pin P4.0
                     CMP R4, #0x00
                     BNE check1
@@ -185,7 +198,7 @@ UserSequence    function
                     BNE store
                     ORR R5, #0x80                   ; Change, add to stack if pressed
 
-
+				
                     ; Add to stack if pressed (?)
 
 
