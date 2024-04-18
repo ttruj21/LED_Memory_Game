@@ -160,6 +160,39 @@ FlashSequence	function
 UserSequence	function	
 				; User inputs a sequence
 					; Check each button to see if pressed
+UserSequence    function    
+                ; User inputs a sequence
+                    ; Check each button to see if pressed
+        check0      AND R4, R3, #0x01               ; Masks input to isolate pin P4.0
+                    CMP R4, #0x00
+                    BNE check1
+                    ORR R5, #0x10                   ; Change, add to stack if pressed
+                   
+        check1      AND R4, R3, #0x02               ; Masks input to isolate pin P4.1
+                    CMP R4, #0x02
+                    BNE check2
+                    ORR R5, #0x20                   ; Change, add to stack if pressed
+
+
+        check2      AND R4, R3, #0x04               ; Masks input to isolate pin P4.2
+                    CMP R4, #0x04
+                    BNE check3
+                    ORR R5, #0x40                   ; Change, add to stack if pressed
+
+
+        check3      AND R4, R3, #0x08               ; Masks input to isolate pin P4.3
+                    CMP R4, #0x08
+                    BNE store
+                    ORR R5, #0x80                   ; Change, add to stack if pressed
+
+
+                    ; Add to stack if pressed (?)
+
+
+                    ; CMP stack_buttons to stack_flashed (?)
+                endp
+               
+
 
 					; Add to stack if pressed (?)
 
