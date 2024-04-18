@@ -20,13 +20,19 @@ __main proc
 				; ADD CODE TO CONFIGURE P5DIR, P5REN AND P5OUT
 				MOV R1, #0x10					; enable resistor for pin
 				STRB R1, [R0, #0x06]			; Resistor enabled for the buttons
-				STRB R1, [R0, #0x02]			; set pin as pull up
+				STRB R1, [R0, #0x02]			; set pin as pull up		
 
-				; checks whether each button is triggered
+
+				; checks whether first button is triggered
 
 check0			AND R4, R3, #0x01				; Masks input to isolate pin P4.0
 				CMP R4, #0x00
 				BNE check0						; if not pressed, keep waiting (endless loop till they start)
+
+				
+				; function to match each button to LED		
+LED_button_config	function
+					
 
 				; auto enter game when pressed. sends into first subroutine for LCD Display
 
@@ -166,19 +172,20 @@ FlashSequence	function
 					; turn off the LED
 					; STR r3, [r0, R1, LSL #2] ; (store value to memory)
 
-UserSequence    function    
-                ; User inputs a sequence
-                ; Check each button to see if pressed
-
-
+UserSequence    function   
 				; go into checks to see if button pressed
-					; if pressed, increment button_counter, go to button_match
+					; if pressed, 
+						; light up corresponding LED
+						; increment button_counter
+						; go to button_match
 						; CMP to memory value according to button_counter
 						; update match_counter (increment by 1 if match)
 				; if match does not equal 5, LOSER
+
         check0      AND R4, R3, #0x01               ; Masks input to isolate pin P4.0
                     CMP R4, #0x00
                     BNE check1
+					CMP R3
                     ORR R5, #0x10                   ; Change, add to stack if pressed
                    
         check1      AND R4, R3, #0x02               ; Masks input to isolate pin P4.1
@@ -198,18 +205,6 @@ UserSequence    function
                     BNE store
                     ORR R5, #0x80                   ; Change, add to stack if pressed
 
-				
-                    ; Add to stack if pressed (?)
-
-
-                    ; CMP stack_buttons to stack_flashed (?)
-                endp
-               
-
-
-					; Add to stack if pressed (?)
-
-					; CMP stack_buttons to stack_flashed (?)
 				endp
 				
 				end 
